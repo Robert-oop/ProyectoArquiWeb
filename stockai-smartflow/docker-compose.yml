@@ -1,0 +1,158 @@
+version: '3.9'
+
+# ══════════════════════════════════════════════════════════
+#  StockAI SmartFlow — Docker Compose (Desarrollo Local)
+#  Variables alineadas con backend/.env.example
+# ══════════════════════════════════════════════════════════
+
+services:
+
+  # ── PostgreSQL ─────────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: stockai-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     stockai_user
+      POSTGRES_PASSWORD: stockai_pass
+      POSTGRES_DB:       stockai_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"       # expuesto para conectar desde TablePlus / DBeaver
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stockai_user -d stockai_db"]
+      interval: 10s
+      timeout:  5s
+      retries:  5
+
+  # ── Redis ──────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: stockai-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout:  5s
+      retries:  5
+
+  # ── Backend (Node.js + Express) ─────────────────────────
+  backend:
+    build:
+      context:    ./backend
+      dockerfile: Dockerfile
+    container_name: stockai-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV:         development
+      PORT:             3000
+      LOG_LEVEL:        debug
+      # PostgreSQL — nombres exactos del database.js y .env.example
+      POSTGRES_SERVER:  postgres
+      POSTGRES_PORT:    5432
+      POSTGRES_USER:    stockai_user
+      POSTGRES_PASSWORD: stockai_pass
+      POSTGRES_DB:      stockai_db
+      # Redis
+      REDIS_URL:        redis://redis:6379
+      # JWT
+      JWT_SECRET:        dev_jwt_secret_change_in_production_min32chars
+      JWT_REFRESH_SECRET: dev_refresh_secret_change_in_production_min32ch
+      # Rate limiting
+      RATE_LIMIT:        100
+      RATE_LIMIT_AUTH:   10
+      # CORS
+      CORS_ORIGINS:      http://localhost:8080,http://localhost:5173
+      # AI Service — puerto 9000 según .env.example del proyecto
+      AI_SERVICE_URL:    http://ai-service:9000
+      CV_CONFIDENCE_THRESHOLD: "0.85"
+      AI_TIMEOUT_MS:     15000
+      # Notificaciones (opcionales en dev — dejar vacíos para deshabilitar)
+      ADMIN_EMAIL:       ""
+      ADMIN_PHONE:       ""
+      EMAIL_HOST:        ""
+      EMAIL_USER:        ""
+      EMAIL_PASS:        ""
+      TWILIO_ACCOUNT_SID: ""
+      TWILIO_AUTH_TOKEN:  ""
+      TWILIO_PHONE_FROM:  ""
+    volumes:
+      - ./backend:/app
+      - /app/node_modules          # evitar sobreescribir node_modules del container
+      - ./database:/database       # migrations y seeders accesibles desde el contenedor
+    ports:
+      - "3000:3000"
+      - "9229:9229"                # puerto de debug Node.js (inspector)
+    command: >
+      sh -c "
+        echo 'Esperando DB...' &&
+        npx sequelize-cli db:migrate &&
+        node server.js
+      "
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/health || exit 1"]
+      interval: 15s
+      timeout:  5s
+      retries:  5
+      start_period: 30s
+
+  # ── AI Service (Python + FastAPI) ──────────────────────
+  ai-service:
+    build:
+      context:    ./ai-service
+      dockerfile: Dockerfile
+    container_name: stockai-ai
+    restart: unless-stopped
+    environment:
+      CV_CONFIDENCE_THRESHOLD: "0.85"
+      PYTHONUNBUFFERED: "1"
+    volumes:
+      - ./ai-service:/app
+      - ai_models:/app/models      # modelos ONNX persistentes entre reinicios
+    ports:
+      - "9000:9000"                # puerto según AI_SERVICE_URL del .env.example
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:9000/health || exit 1"]
+      interval: 20s
+      timeout:  10s
+      retries:  5
+      start_period: 40s            # FastAPI + OpenCV tarda en iniciar
+
+  # ── Frontend (Nginx + Vite build) ──────────────────────
+  frontend:
+    build:
+      context:    ./frontend
+      dockerfile: Dockerfile
+    container_name: stockai-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"                  # http://localhost:8080
+    environment:
+      VITE_API_URL: http://localhost:3000/api/v1
+
+# ── Volúmenes persistentes ─────────────────────────────────
+volumes:
+  postgres_data:
+    name: stockai_postgres_data
+  redis_data:
+    name: stockai_redis_data
+  ai_models:
+    name: stockai_ai_models
+
+# ── Red interna ────────────────────────────────────────────
+networks:
+  default:
+    name: stockai-network

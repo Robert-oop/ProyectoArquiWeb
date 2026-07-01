@@ -1,0 +1,14 @@
+{
+  "name": "stockai-smartflow-frontend",
+  "version": "1.0.0",
+  "description": "StockAI SmartFlow WMS — SPA Vanilla JS con Vite",
+  "type": "module",
+  "scripts": {
+    "dev":     "vite",
+    "build":   "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

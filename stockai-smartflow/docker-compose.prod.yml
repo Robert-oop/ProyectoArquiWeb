@@ -1,0 +1,72 @@
+version: '3.9'
+
+# ══════════════════════════════════════════════════════════
+#  StockAI SmartFlow — Docker Compose Override (Producción)
+#  Uso: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# ══════════════════════════════════════════════════════════
+
+services:
+
+  postgres:
+    restart: always
+    ports: []                      # sin puertos expuestos hacia el host
+    environment:
+      POSTGRES_USER:     ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB:       ${POSTGRES_DB}
+
+  redis:
+    restart: always
+    ports: []
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --requirepass ${REDIS_PASSWORD}
+
+  backend:
+    restart: always
+    ports:
+      - "3000:3000"               # solo el API — sin puerto de debug
+    volumes:
+      - /app/node_modules         # sin bind mount en producción
+    environment:
+      NODE_ENV:          production
+      LOG_LEVEL:         warn
+      POSTGRES_SERVER:   ${POSTGRES_SERVER}
+      POSTGRES_PORT:     ${POSTGRES_PORT}
+      POSTGRES_USER:     ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB:       ${POSTGRES_DB}
+      REDIS_URL:         redis://:${REDIS_PASSWORD}@redis:6379
+      JWT_SECRET:        ${JWT_SECRET}
+      JWT_REFRESH_SECRET:${JWT_REFRESH_SECRET}
+      CORS_ORIGINS:      ${CORS_ORIGINS}
+      AI_SERVICE_URL:    http://ai-service:9000
+      CV_CONFIDENCE_THRESHOLD: ${CV_CONFIDENCE_THRESHOLD:-0.85}
+      ADMIN_EMAIL:       ${ADMIN_EMAIL}
+      ADMIN_PHONE:       ${ADMIN_PHONE}
+      EMAIL_HOST:        ${EMAIL_HOST}
+      EMAIL_USER:        ${EMAIL_USER}
+      EMAIL_PASS:        ${EMAIL_PASS}
+      TWILIO_ACCOUNT_SID:${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_PHONE_FROM: ${TWILIO_PHONE_FROM}
+    command: node server.js       # sin migrate automático en producción
+
+  ai-service:
+    restart: always
+    ports: []
+    volumes:
+      - ai_models:/app/models
+
+  frontend:
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"                 # HTTPS via Nginx — requiere certificado montado
+    volumes:
+      - ./nginx/certs:/etc/nginx/certs:ro
+    environment:
+      VITE_API_URL: ${VITE_API_URL}

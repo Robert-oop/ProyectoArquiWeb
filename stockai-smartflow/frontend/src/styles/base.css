@@ -1,0 +1,156 @@
+/* ════════════════════════════════════════════════════════════════════
+   BASE — Reset, body, tipografía global, scrollbar, utilidades
+   ════════════════════════════════════════════════════════════════════ */
+@import './variables.css';
+
+/* ── Reset ────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Body ────────────────────────────────────────────────────────── */
+body {
+  font-family:    var(--font-body);
+  background:     var(--bg-base);
+  color:          var(--text-primary);
+  min-height:     100vh;
+  display:        flex;
+  overflow:       hidden;
+  font-size:      14px;
+  line-height:    1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar personalizada ─────────────────────────────────────── */
+::-webkit-scrollbar              { width: 5px; height: 5px; }
+::-webkit-scrollbar-track        { background: transparent; }
+::-webkit-scrollbar-thumb        { background: var(--bg-elevated); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover  { background: var(--border-strong); }
+
+/* ── Tipografía base ─────────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+p   { color: var(--text-secondary); line-height: 1.65; }
+a   { color: var(--accent-cyan); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code, pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--accent-cyan);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 20px 0;
+}
+
+/* ── Animaciones base ────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: translateX(0);   opacity: 1; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.85); }
+}
+
+/* ── Utilidades de visibilidad ────────────────────────────────────── */
+.hidden   { display: none !important; }
+.sr-only  {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
+}
+
+/* ── Utilidades de layout ────────────────────────────────────────── */
+.flex        { display: flex; }
+.flex-col    { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-4       { gap: 4px; }
+.gap-8       { gap: 8px; }
+.gap-12      { gap: 12px; }
+.gap-16      { gap: 16px; }
+.flex-1      { flex: 1; }
+
+/* ── Utilidades de texto ─────────────────────────────────────────── */
+.text-primary    { color: var(--text-primary); }
+.text-secondary  { color: var(--text-secondary); }
+.text-muted      { color: var(--text-muted); }
+.text-cyan       { color: var(--accent-cyan); }
+.text-amber      { color: var(--accent-amber); }
+.text-green      { color: var(--accent-green); }
+.text-red        { color: var(--accent-red); }
+.text-mono       { font-family: var(--font-mono); }
+.text-sm         { font-size: 12px; }
+.text-xs         { font-size: 11px; }
+.truncate        { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Colores de fondo de utilidad ────────────────────────────────── */
+.bg-card     { background: var(--bg-card); }
+.bg-surface  { background: var(--bg-surface); }
+.bg-elevated { background: var(--bg-elevated); }
+
+/* ── Loading spinner ─────────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 18px; height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent-cyan);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+.spinner-lg { width: 32px; height: 32px; border-width: 3px; }
+
+/* ── Dot de pulso (estado activo) ────────────────────────────────── */
+.pulse-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 6px var(--accent-green);
+  animation: pulse 1.4s ease infinite;
+}
+
+/* ── Empty state ─────────────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--text-secondary);
+  animation: fadeUp 0.3s ease;
+}
+.empty-state .icon  { font-size: 40px; margin-bottom: 16px; opacity: 0.4; }
+.empty-state .title { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
+.empty-state .desc  { font-size: 13px; color: var(--text-muted); }
+
+/* ── Responsive base ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  body { font-size: 13px; }
+}

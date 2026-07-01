@@ -1,0 +1,14 @@
+2026-06-25 23:34:39 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async stockCheckerJob (/app/src/jobs/stockChecker.job.js:27:22)
+2026-06-25 23:37:35 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async stockCheckerJob (/app/src/jobs/stockChecker.job.js:27:22)

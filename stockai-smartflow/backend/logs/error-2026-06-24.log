@@ -1,0 +1,244 @@
+2026-06-24 23:04:06 [error] Error: getaddrinfo EAI_AGAIN ai-service
+    at AxiosError.from (/app/node_modules/axios/dist/node/axios.cjs:1355:24)
+    at RedirectableRequest.handleRequestError (/app/node_modules/axios/dist/node/axios.cjs:4026:25)
+    at RedirectableRequest.emit (node:events:536:35)
+    at eventHandlers.<computed> (/app/node_modules/follow-redirects/index.js:56:24)
+    at ClientRequest.emit (node:events:524:28)
+    at emitErrorEvent (node:_http_client:101:11)
+    at Socket.socketErrorListener (node:_http_client:504:5)
+    at Socket.emit (node:events:536:35)
+    at emitErrorNT (node:internal/streams/destroy:169:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:128:3)
+    at Axios.request (/app/node_modules/axios/dist/node/axios.cjs:5427:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.identify (/app/src/controllers/ai.controller.js:34:22)
+2026-06-24 23:05:12 [error] Error: getaddrinfo EAI_AGAIN ai-service
+    at AxiosError.from (/app/node_modules/axios/dist/node/axios.cjs:1355:24)
+    at RedirectableRequest.handleRequestError (/app/node_modules/axios/dist/node/axios.cjs:4026:25)
+    at RedirectableRequest.emit (node:events:536:35)
+    at eventHandlers.<computed> (/app/node_modules/follow-redirects/index.js:56:24)
+    at ClientRequest.emit (node:events:524:28)
+    at emitErrorEvent (node:_http_client:101:11)
+    at Socket.socketErrorListener (node:_http_client:504:5)
+    at Socket.emit (node:events:536:35)
+    at emitErrorNT (node:internal/streams/destroy:169:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:128:3)
+    at Axios.request (/app/node_modules/axios/dist/node/axios.cjs:5427:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.identify (/app/src/controllers/ai.controller.js:34:22)
+2026-06-24 23:24:54 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:25:54 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:26:54 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:27:54 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:28:54 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:29:54 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:30:54 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:31:09 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:32:10 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:33:29 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:35:31 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:36:32 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:37:33 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:38:34 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:39:35 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:40:36 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:41:37 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:42:19 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:42:38 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:43:39 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:44:40 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:45:41 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:46:42 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Product.findAll (/app/node_modules/sequelize/lib/model.js:1140:21)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:17:22)
+2026-06-24 23:47:38 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:18:18)
+2026-06-24 23:47:43 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:18:18)
+2026-06-24 23:48:44 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:18:18)
+2026-06-24 23:50:46 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:18:18)
+2026-06-24 23:51:47 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:18:18)
+2026-06-24 23:52:48 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:18:18)
+2026-06-24 23:53:49 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:18:18)
+2026-06-24 23:54:50 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:18:18)
+2026-06-24 23:55:51 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:18:18)
+2026-06-24 23:56:52 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:18:18)
+2026-06-24 23:57:53 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async exports.getCritical (/app/src/controllers/stock.controller.js:18:18)

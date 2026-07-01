@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[python]":     { "editor.defaultFormatter": "ms-python.python" },
+  "eslint.validate": ["javascript"],
+  "python.defaultInterpreterPath": "./ai-service/.venv/bin/python",
+  "files.exclude": { "**/node_modules": true, "**/__pycache__": true, "**/.venv": true },
+  "editor.rulers": [100],
+  "files.trimTrailingWhitespace": true
+}

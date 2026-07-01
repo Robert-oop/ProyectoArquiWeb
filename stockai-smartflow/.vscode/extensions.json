@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ms-python.python",
+    "ms-azuretools.vscode-docker",
+    "humao.rest-client",
+    "eamodio.gitlens",
+    "mikestead.dotenv",
+    "bradlc.vscode-tailwindcss",
+    "pkief.material-icon-theme",
+    "streetsidesoftware.code-spell-checker-spanish"
+  ]
+}

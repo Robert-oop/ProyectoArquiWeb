@@ -1,0 +1,84 @@
+2026-06-19 03:50:40 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Product.sync (/app/node_modules/sequelize/lib/model.js:984:11)
+    at async Sequelize.sync (/app/node_modules/sequelize/lib/sequelize.js:377:9)
+    at async bootstrap (/app/server.js:20:7)
+2026-06-19 03:50:42 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Product.sync (/app/node_modules/sequelize/lib/model.js:984:11)
+    at async Sequelize.sync (/app/node_modules/sequelize/lib/sequelize.js:377:9)
+    at async bootstrap (/app/server.js:20:7)
+2026-06-19 03:50:45 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Product.sync (/app/node_modules/sequelize/lib/model.js:984:11)
+    at async Sequelize.sync (/app/node_modules/sequelize/lib/sequelize.js:377:9)
+    at async bootstrap (/app/server.js:20:7)
+2026-06-19 03:50:48 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Product.sync (/app/node_modules/sequelize/lib/model.js:984:11)
+    at async Sequelize.sync (/app/node_modules/sequelize/lib/sequelize.js:377:9)
+    at async bootstrap (/app/server.js:20:7)
+2026-06-19 03:50:51 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Product.sync (/app/node_modules/sequelize/lib/model.js:984:11)
+    at async Sequelize.sync (/app/node_modules/sequelize/lib/sequelize.js:377:9)
+    at async bootstrap (/app/server.js:20:7)
+2026-06-19 03:50:55 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Product.sync (/app/node_modules/sequelize/lib/model.js:984:11)
+    at async Sequelize.sync (/app/node_modules/sequelize/lib/sequelize.js:377:9)
+    at async bootstrap (/app/server.js:20:7)
+2026-06-19 03:51:01 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Product.sync (/app/node_modules/sequelize/lib/model.js:984:11)
+    at async Sequelize.sync (/app/node_modules/sequelize/lib/sequelize.js:377:9)
+    at async bootstrap (/app/server.js:20:7)
+2026-06-19 03:51:10 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Product.sync (/app/node_modules/sequelize/lib/model.js:984:11)
+    at async Sequelize.sync (/app/node_modules/sequelize/lib/sequelize.js:377:9)
+    at async bootstrap (/app/server.js:20:7)
+2026-06-19 03:51:25 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Product.sync (/app/node_modules/sequelize/lib/model.js:984:11)
+    at async Sequelize.sync (/app/node_modules/sequelize/lib/sequelize.js:377:9)
+    at async bootstrap (/app/server.js:20:7)
+2026-06-19 03:51:53 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Product.sync (/app/node_modules/sequelize/lib/model.js:984:11)
+    at async Sequelize.sync (/app/node_modules/sequelize/lib/sequelize.js:377:9)
+    at async bootstrap (/app/server.js:20:7)
+2026-06-19 03:52:47 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Product.sync (/app/node_modules/sequelize/lib/model.js:984:11)
+    at async Sequelize.sync (/app/node_modules/sequelize/lib/sequelize.js:377:9)
+    at async bootstrap (/app/server.js:20:7)
+2026-06-19 03:53:49 [error] Error
+    at Query.run (/app/node_modules/sequelize/lib/dialects/postgres/query.js:50:25)
+    at /app/node_modules/sequelize/lib/sequelize.js:315:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Product.sync (/app/node_modules/sequelize/lib/model.js:984:11)
+    at async Sequelize.sync (/app/node_modules/sequelize/lib/sequelize.js:377:9)
+    at async bootstrap (/app/server.js:20:7)
