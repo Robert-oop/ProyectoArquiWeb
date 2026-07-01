@@ -1,0 +1,99 @@
+# ═══════════════════════════════════════════════════════════
+# PostgreSQL — StatefulSet + PersistentVolumeClaim + Service
+# Se usa StatefulSet (no Deployment) porque PostgreSQL requiere
+# identidad de red estable y almacenamiento persistente único.
+# ═══════════════════════════════════════════════════════════
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: stockai
+spec:
+  accessModes:
+    - ReadWriteOnce         # un nodo a la vez (suficiente para una instancia de BD)
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard   # ajustar según el proveedor cloud (gp2 en AWS, pd-standard en GCP)
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: stockai
+  labels:
+    app: postgres
+spec:
+  serviceName: "postgres-service"
+  replicas: 1               # PostgreSQL standalone — HA requiere Patroni o RDS en producción real
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: stockai-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: stockai-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: stockai-secrets
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "stockai_user", "-d", "stockai_db"]
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "stockai_user", "-d", "stockai_db"]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: stockai
+spec:
+  type: ClusterIP            # solo accesible dentro del clúster
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hito 3 — Estrategia CI/CD | StockAI SmartFlow</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Source+Sans+3:wght@400;600;700&display=swap');
+
+        :root {
+            --verde:       #134e4a;
+            --verde-med:   #0f766e;
+            --verde-claro: #ccfbf1;
+            --ambar:       #92400e;
+            --ambar-claro: #fef3c7;
+            --carbon:      #1e293b;
+            --gris:        #475569;
+            --gris-claro:  #e2e8f0;
+            --fondo:       #f1f5f4;
+            --blanco:      #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Merriweather', Georgia, serif;
+            background: var(--fondo);
+            color: var(--carbon);
+            line-height: 1.85;
+            font-size: 15px;
+        }
+
+        .banda-top   { background: var(--verde); height: 6px; }
+        .banda-ambar { background: var(--ambar); height: 3px; }
+
+        /* ── Encabezado ── */
+        .encabezado {
+            background: var(--blanco);
+            border-bottom: 1px solid var(--gris-claro);
+            padding: 20px 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+        .encabezado-texto h1 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1em;
+            font-weight: 700;
+            color: var(--verde);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        .encabezado-texto p {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.88em;
+            color: var(--gris);
+            margin-top: 2px;
+        }
+        .etiqueta-hito {
+            background: var(--verde);
+            color: var(--blanco);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.82em;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding: 7px 20px;
+            border-left: 4px solid var(--ambar);
+            white-space: nowrap;
+        }
+
+        /* ── Hoja de papel ── */
+        .pagina {
+            max-width: 860px;
+            margin: 40px auto 60px;
+            background: var(--blanco);
+            box-shadow: 0 2px 24px rgba(0,0,0,0.10);
+        }
+
+        /* ── Portada ── */
+        .portada {
+            padding: 72px 64px 56px;
+            border-bottom: 3px solid var(--verde);
+        }
+        .portada-categoria {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.82em;
+            font-weight: 700;
+            color: var(--ambar);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        .portada h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 2.4em;
+            font-weight: 700;
+            color: var(--verde);
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+        .portada-subtitulo {
+            font-family: 'Merriweather', serif;
+            font-size: 1.1em;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--gris);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        .portada-linea {
+            width: 60px;
+            height: 3px;
+            background: var(--ambar);
+            margin-bottom: 36px;
+        }
+        .portada-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid var(--gris-claro);
+            border-left: 1px solid var(--gris-claro);
+        }
+        .meta-campo {
+            padding: 16px 20px;
+            border-right: 1px solid var(--gris-claro);
+            border-bottom: 1px solid var(--gris-claro);
+        }
+        .meta-campo label {
+            display: block;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.75em;
+            font-weight: 700;
+            color: var(--ambar);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .meta-campo span {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.95em;
+            color: var(--carbon);
+            font-weight: 600;
+        }
+
+        /* ── Índice ── */
+        .indice {
+            padding: 40px 64px;
+            background: #f8faf9;
+            border-bottom: 1px solid var(--gris-claro);
+        }
+        .indice h3 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.75em;
+            font-weight: 700;
+            color: var(--ambar);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        .indice ol {
+            list-style: none;
+            padding: 0;
+        }
+        .indice ol li {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.95em;
+            color: var(--gris);
+            padding: 5px 0;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            border-bottom: 1px dotted var(--gris-claro);
+        }
+        .indice ol li:last-child { border-bottom: none; }
+        .indice ol li .num { font-weight: 700; color: var(--verde); min-width: 24px; }
+        .indice ol li a { color: var(--carbon); text-decoration: none; }
+        .indice ol li a:hover { color: var(--verde); text-decoration: underline; }
+
+        /* ── Cuerpo ── */
+        .cuerpo { padding: 48px 64px 72px; }
+
+        .seccion { margin-top: 56px; }
+        .seccion:first-child { margin-top: 0; }
+
+        h2.titulo-seccion {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1.25em;
+            font-weight: 700;
+            color: var(--verde);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--verde);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        h2.titulo-seccion .num-seccion {
+            background: var(--verde);
+            color: var(--blanco);
+            font-size: 0.85em;
+            padding: 2px 10px;
+            letter-spacing: 0;
+        }
+
+        h3.subtitulo {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1.05em;
+            font-weight: 700;
+            color: var(--ambar);
+            margin: 32px 0 12px;
+            padding-left: 12px;
+            border-left: 3px solid var(--ambar);
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--carbon);
+            font-size: 0.97em;
+            text-align: justify;
+        }
+
+        /* ── Cita técnica ── */
+        .cita-tecnica {
+            background: var(--ambar-claro);
+            border-left: 5px solid var(--ambar);
+            padding: 18px 24px;
+            margin: 24px 0;
+            font-style: italic;
+            font-size: 0.97em;
+        }
+        .cita-tecnica p { color: var(--ambar); margin: 0; text-align: left; }
+
+        /* ── Pipeline de etapas ── */
+        .pipeline-visual {
+            display: flex;
+            align-items: stretch;
+            margin: 28px 0;
+            border: 1px solid var(--gris-claro);
+            overflow-x: auto;
+        }
+        .etapa {
+            flex: 1;
+            min-width: 120px;
+            padding: 20px 14px;
+            text-align: center;
+            border-right: 1px solid var(--gris-claro);
+            position: relative;
+        }
+        .etapa:last-child { border-right: none; }
+        .etapa-icono {
+            display: block;
+            font-size: 1.6em;
+            margin-bottom: 8px;
+        }
+        .etapa-nombre {
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 700;
+            font-size: 0.8em;
+            color: var(--carbon);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .etapa-desc {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.78em;
+            color: var(--gris);
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+        .etapa.e-trigger { background: #fffbeb; border-top: 3px solid #d97706; }
+        .etapa.e-build   { background: #eff6ff; border-top: 3px solid #3b82f6; }
+        .etapa.e-valid   { background: #f0fdf4; border-top: 3px solid #22c55e; }
+        .etapa.e-publish { background: #faf5ff; border-top: 3px solid #9333ea; }
+        .etapa.e-deploy  { background: #fff7ed; border-top: 3px solid #ea580c; }
+        .etapa.e-verify  { background: #f0fdfa; border-top: 3px solid var(--verde-med); }
+
+        /* ── Tablas ── */
+        .tabla-wrap {
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid var(--gris-claro);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.88em;
+        }
+        thead th {
+            background: var(--verde);
+            color: var(--blanco);
+            padding: 11px 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.82em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tbody td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--gris-claro);
+            vertical-align: top;
+            color: var(--carbon);
+        }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:nth-child(even) { background: #f8faf9; }
+        tbody tr:hover { background: var(--verde-claro); }
+
+        .etiqueta {
+            display: inline-block;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.78em;
+            font-weight: 700;
+            padding: 2px 9px;
+            border-radius: 2px;
+            letter-spacing: 0.3px;
+        }
+        .e-ci   { background: #dbeafe; color: #1e3a8a; }
+        .e-cd   { background: #d1fae5; color: #065f46; }
+        .e-gate { background: #fef3c7; color: #78350f; }
+
+        /* ── Diagrama de código ── */
+        .diagrama {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-size: 0.84em;
+            padding: 28px 32px;
+            margin: 20px 0;
+            line-height: 1.8;
+            overflow-x: auto;
+            border-left: 4px solid var(--ambar);
+        }
+        .diagrama .d-nota   { color: #64748b; }
+        .diagrama .d-rama   { color: #86efac; }
+        .diagrama .d-feat   { color: #7dd3fc; }
+        .diagrama .d-tag    { color: #fbbf24; }
+        .diagrama .d-ok     { color: #4ade80; }
+        .diagrama .d-flecha { color: #f87171; }
+
+        /* ── Cuadrícula de beneficios ── */
+        .cuadricula-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .beneficio {
+            padding: 20px 22px;
+            border: 1px solid var(--gris-claro);
+            border-top: 4px solid var(--verde-med);
+        }
+        .beneficio h4 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.85em;
+            font-weight: 700;
+            color: var(--verde-med);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .beneficio ul {
+            padding-left: 18px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.92em;
+        }
+        .beneficio li { margin-bottom: 7px; color: var(--carbon); }
+
+        /* ── Tabla de secretos ── */
+        code {
+            font-family: 'Courier New', monospace;
+            background: var(--verde-claro);
+            color: var(--verde);
+            padding: 1px 6px;
+            font-size: 0.88em;
+            border-radius: 2px;
+        }
+
+        /* ── Conclusión ── */
+        .conclusion {
+            background: var(--verde);
+            color: var(--blanco);
+            padding: 32px 40px;
+            margin: 36px 0 0;
+        }
+        .conclusion .v-titulo {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.78em;
+            font-weight: 700;
+            color: #99f6e4;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+        .conclusion p {
+            color: #e0f2f0;
+            font-size: 0.95em;
+            margin: 0;
+            text-align: justify;
+            line-height: 1.8;
+        }
+
+        /* ── Pie de página ── */
+        .pie {
+            background: var(--carbon);
+            color: #94a3b8;
+            padding: 22px 56px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.82em;
+        }
+        .pie strong { color: var(--blanco); }
+    </style>
+</head>
+<body>
+
+<div class="banda-top"></div>
+<div class="banda-ambar"></div>
+
+<div class="encabezado">
+    <div class="encabezado-texto">
+        <h1>Proyecto Semestral I+D — Arquitectura de Desarrollo Web</h1>
+        <p>ICCE1042 &nbsp;·&nbsp; Universidad Mayor &nbsp;·&nbsp; Facultad de Ingeniería &nbsp;·&nbsp; 2026</p>
+    </div>
+    <div class="etiqueta-hito">Hito 3 — Unidad 3</div>
+</div>
+
+<div class="pagina">
+
+    <!-- ══ PORTADA ══ -->
+    <div class="portada">
+        <div class="portada-categoria">Informe Técnico · Integración y Entrega Continua</div>
+        <h2>StockAI SmartFlow</h2>
+        <div class="portada-subtitulo">
+            Estrategia de CI/CD — Propuesta de automatización del despliegue<br>
+            mediante GitHub Actions y Kubernetes
+        </div>
+        <div class="portada-linea"></div>
+        <div class="portada-meta">
+            <div class="meta-campo">
+                <label>Asignatura</label>
+                <span>ICCE1042 — Arq. Desarrollo Web</span>
+            </div>
+            <div class="meta-campo">
+                <label>Hito</label>
+                <span>3 — Unidad 3</span>
+            </div>
+            <div class="meta-campo">
+                <label>Año académico</label>
+                <span>2026</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ ÍNDICE ══ -->
+    <div class="indice">
+        <h3>Contenido</h3>
+        <ol>
+            <li><span class="num">1.</span><a href="#s1">Definición del problema</a></li>
+            <li><span class="num">2.</span><a href="#s2">Conceptos fundamentales: CI y CD</a></li>
+            <li><span class="num">3.</span><a href="#s3">Estrategia de ramas (GitFlow simplificado)</a></li>
+            <li><span class="num">4.</span><a href="#s4">Pipeline completo — etapas y responsabilidades</a></li>
+            <li><span class="num">5.</span><a href="#s5">Integración con Kubernetes — Rolling Update</a></li>
+            <li><span class="num">6.</span><a href="#s6">Gestión de secretos en el pipeline</a></li>
+            <li><span class="num">7.</span><a href="#s7">Beneficios para StockAI SmartFlow</a></li>
+            <li><span class="num">8.</span><a href="#s8">Flujo de extremo a extremo</a></li>
+        </ol>
+    </div>
+
+    <!-- ══ CUERPO ══ -->
+    <div class="cuerpo">
+
+        <!-- SECCIÓN 1 -->
+        <div class="seccion" id="s1">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">1</span>
+                Definición del problema
+            </h2>
+
+            <p>Sin automatización, cada actualización del sistema StockAI SmartFlow requiere que un desarrollador ejecute manualmente entre ocho y doce comandos en secuencia: construir las tres imágenes Docker, subirlas a un registro de contenedores, conectarse al servidor de producción, aplicar los manifiestos de Kubernetes y verificar que los pods arrancaron correctamente. Una sola equivocación en este proceso puede dejar el sistema de bodega fuera de servicio durante minutos o permitir que una versión defectuosa llegue a producción sin ser detectada.</p>
+
+            <p>La estrategia CI/CD propuesta elimina por completo esta intervención manual. Desde el momento en que un desarrollador fusiona código a la rama principal, la cadena de automatización toma el control y solo libera a producción lo que ha sido verificado de forma exitosa.</p>
+
+            <div class="cita-tecnica">
+                <p>"El objetivo no es desplegar rápido. Es desplegar con confianza. CI/CD no reemplaza la revisión humana del código; reemplaza la ejecución manual de pasos repetibles que un humano puede omitir o ejecutar en orden incorrecto."</p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2 -->
+        <div class="seccion" id="s2">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">2</span>
+                Conceptos fundamentales: CI y CD
+            </h2>
+
+            <h3 class="subtitulo">2.1 Integración Continua (CI)</h3>
+            <p>Es la práctica de integrar cambios de código con frecuencia —idealmente varias veces al día— verificando de manera automática que cada integración no rompe el sistema. En StockAI SmartFlow, CI implica que cada vez que un desarrollador sube código a GitHub, el sistema valida de forma automática que el código compila correctamente y que las imágenes Docker se construyen sin errores.</p>
+
+            <h3 class="subtitulo">2.2 Entrega Continua (CD)</h3>
+            <p>Extiende la integración continua llevando automáticamente el código verificado hasta el entorno de producción. En StockAI SmartFlow, CD significa que, una vez que el código supera las validaciones, las imágenes se publican en el registro de contenedores y se despliegan en el clúster de Kubernetes sin intervención humana, salvo por una aprobación explícita antes del paso final.</p>
+        </div>
+
+        <!-- SECCIÓN 3 -->
+        <div class="seccion" id="s3">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">3</span>
+                Estrategia de ramas (GitFlow simplificado)
+            </h2>
+
+            <p>El flujo de trabajo se organiza en torno a dos tipos de ramas con comportamiento diferenciado en el pipeline de automatización.</p>
+
+            <div class="diagrama">
+<span class="d-nota">── Desarrollo de una nueva funcionalidad ──────────────────────────</span>
+
+<span class="d-feat">feature/ingreso-manual</span>  <span class="d-flecha">──▶</span>  CI ejecuta: lint + construcción de imágenes (sin publicar)
+         <span class="d-flecha">│</span>
+         <span class="d-flecha">▼  Pull Request</span>
+<span class="d-rama">main</span>                      <span class="d-flecha">──▶</span>  CI + CD: construcción → publicación → despliegue en Kubernetes
+
+<span class="d-nota">
+── Cada commit en main representa una versión desplegable ─────────</span>
+
+<span class="d-rama">main</span>  <span class="d-nota">commit abc1234</span>  <span class="d-flecha">──▶</span>  imagen: <span class="d-tag">stockai-backend:abc1234</span>
+<span class="d-rama">main</span>  <span class="d-nota">commit def5678</span>  <span class="d-flecha">──▶</span>  imagen: <span class="d-tag">stockai-backend:def5678</span>
+
+<span class="d-nota">
+Beneficio: rollback inmediato utilizando el tag del commit anterior.</span>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 4 -->
+        <div class="seccion" id="s4">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">4</span>
+                Pipeline completo — etapas y responsabilidades
+            </h2>
+
+            <div class="pipeline-visual">
+                <div class="etapa e-trigger">
+                    <span class="etapa-icono">🔀</span>
+                    <div class="etapa-nombre">Trigger</div>
+                    <div class="etapa-desc">Push o PR detectado por GitHub</div>
+                </div>
+                <div class="etapa e-build">
+                    <span class="etapa-icono">🔨</span>
+                    <div class="etapa-nombre">Build</div>
+                    <div class="etapa-desc">Construye las 3 imágenes Docker</div>
+                </div>
+                <div class="etapa e-valid">
+                    <span class="etapa-icono">✅</span>
+                    <div class="etapa-nombre">Validar</div>
+                    <div class="etapa-desc">Lint y verificación de sintaxis</div>
+                </div>
+                <div class="etapa e-publish">
+                    <span class="etapa-icono">📦</span>
+                    <div class="etapa-nombre">Publicar</div>
+                    <div class="etapa-desc">Sube imágenes al registro (solo main)</div>
+                </div>
+                <div class="etapa e-deploy">
+                    <span class="etapa-icono">🚀</span>
+                    <div class="etapa-nombre">Deploy</div>
+                    <div class="etapa-desc">Aplica manifiestos en Kubernetes</div>
+                </div>
+                <div class="etapa e-verify">
+                    <span class="etapa-icono">🔍</span>
+                    <div class="etapa-nombre">Verificar</div>
+                    <div class="etapa-desc">Confirma rollout exitoso</div>
+                </div>
+            </div>
+
+            <div class="tabla-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Etapa</th>
+                            <th>Tipo</th>
+                            <th>Cuándo se ejecuta</th>
+                            <th>Qué hace</th>
+                            <th>Si falla</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Lint</strong></td>
+                            <td><span class="etiqueta e-ci">CI</span></td>
+                            <td>Todo push o PR</td>
+                            <td>Verifica la sintaxis del código Node.js. Detecta errores básicos antes de construir imágenes.</td>
+                            <td>Bloquea el pipeline. No se construye ninguna imagen.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Construcción de imágenes</strong></td>
+                            <td><span class="etiqueta e-ci">CI</span></td>
+                            <td>Todo push o PR</td>
+                            <td>Construye las 3 imágenes Docker (backend, frontend, servicio de IA) usando el stage <code>production</code> del Dockerfile multi-stage. No las publica en el registro.</td>
+                            <td>Bloquea el pipeline. Indica un error en el Dockerfile o en las dependencias.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Publicación de imágenes</strong></td>
+                            <td><span class="etiqueta e-cd">CD</span></td>
+                            <td>Solo en push a <code>main</code></td>
+                            <td>Sube las 3 imágenes al GitHub Container Registry (ghcr.io) con dos etiquetas: el SHA del commit (p. ej., <code>abc1234</code>) y <code>latest</code>. La etiqueta por SHA garantiza trazabilidad exacta.</td>
+                            <td>Bloquea el despliegue. Las imágenes previas permanecen en producción.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Aprobación manual</strong></td>
+                            <td><span class="etiqueta e-gate">Gate</span></td>
+                            <td>Antes del despliegue a producción</td>
+                            <td>GitHub Environments pausa el pipeline y notifica al equipo responsable. Un encargado revisa los cambios y aprueba o rechaza el despliegue en la interfaz de GitHub.</td>
+                            <td>El pipeline permanece en espera hasta 72 horas. Si nadie aprueba, se cancela automáticamente.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Despliegue en Kubernetes</strong></td>
+                            <td><span class="etiqueta e-cd">CD</span></td>
+                            <td>Tras la aprobación manual</td>
+                            <td>Aplica los manifiestos YAML al clúster. Actualiza las imágenes en los Deployments utilizando el SHA del commit. Kubernetes ejecuta un <em>Rolling Update</em>: reemplaza un pod a la vez, manteniendo el servicio disponible durante toda la actualización.</td>
+                            <td>Kubernetes detiene el rolling update. Los pods anteriores continúan atendiendo el tráfico.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Verificación de rollout</strong></td>
+                            <td><span class="etiqueta e-cd">CD</span></td>
+                            <td>Inmediatamente después del despliegue</td>
+                            <td>Espera hasta 3 minutos a que todos los pods estén en estado <code>Running</code> y superen sus verificaciones de salud. Si algún pod falla de forma repetida, Kubernetes lo detecta y el paso falla automáticamente.</td>
+                            <td>El pipeline falla con alerta. Es posible realizar un rollback manual con un único comando.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 5 -->
+        <div class="seccion" id="s5">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">5</span>
+                Integración con Kubernetes — Rolling Update
+            </h2>
+
+            <p>La estrategia de despliegue elegida es <strong>Rolling Update</strong>, que corresponde a la opción predeterminada de Kubernetes y la más adecuada para este sistema. En lugar de detener todos los pods y levantar los nuevos de forma simultánea —lo que causaría tiempo de inactividad—, Kubernetes reemplaza los pods de a uno mientras los demás continúan atendiendo peticiones.</p>
+
+            <h3 class="subtitulo">5.1 Cómo ocurre un despliegue sin tiempo de inactividad</h3>
+            <p>El backend tiene 3 réplicas configuradas. Cuando GitHub Actions actualiza la imagen, Kubernetes ejecuta la siguiente secuencia:</p>
+
+            <div class="diagrama">
+<span class="d-nota">Estado inicial: 3 pods ejecutando la versión v1</span>
+<span class="d-rama">Pod-1 [v1]  ● en ejecución</span>
+<span class="d-rama">Pod-2 [v1]  ● en ejecución</span>
+<span class="d-rama">Pod-3 [v1]  ● en ejecución</span>
+
+<span class="d-nota">
+Paso 1: Kubernetes crea Pod-4 con la versión v2</span>
+<span class="d-rama">Pod-1 [v1]  ● en ejecución</span>   <span class="d-nota">↑ siguen atendiendo tráfico</span>
+<span class="d-rama">Pod-2 [v1]  ● en ejecución</span>
+<span class="d-rama">Pod-3 [v1]  ● en ejecución</span>
+<span class="d-feat">Pod-4 [v2]  ◐ iniciando...</span>
+
+<span class="d-nota">
+Paso 2: Pod-4 supera la verificación de salud → Kubernetes termina Pod-1</span>
+<span class="d-feat">Pod-4 [v2]  ● en ejecución</span>
+<span class="d-rama">Pod-2 [v1]  ● en ejecución</span>
+<span class="d-rama">Pod-3 [v1]  ● en ejecución</span>
+
+<span class="d-nota">
+Pasos 3 y 4: se repite el ciclo hasta que todos los pods ejecutan v2</span>
+<span class="d-feat">Pod-4 [v2]  ● en ejecución</span>
+<span class="d-feat">Pod-5 [v2]  ● en ejecución</span>
+<span class="d-feat">Pod-6 [v2]  ● en ejecución</span>  <span class="d-nota">← despliegue completado, cero tiempo de inactividad</span>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 6 -->
+        <div class="seccion" id="s6">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">6</span>
+                Gestión de secretos en el pipeline
+            </h2>
+
+            <p>Las credenciales nunca se almacenan en el repositorio. GitHub Actions proporciona un almacén de secretos cifrado, accesible únicamente durante la ejecución del workflow.</p>
+
+            <div class="tabla-wrap">
+                <table>
+                    <thead><tr><th>Secret</th><th>Dónde se utiliza</th><th>Descripción</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td><code>GITHUB_TOKEN</code></td>
+                            <td>Publicación</td>
+                            <td>Token automático de GitHub Actions. Permite subir imágenes al registro sin configuración adicional.</td>
+                        </tr>
+                        <tr>
+                            <td><code>KUBE_CONFIG</code></td>
+                            <td>Despliegue</td>
+                            <td>Archivo kubeconfig del clúster codificado en base64. Permite a kubectl autenticarse y aplicar los manifiestos.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Las credenciales de la base de datos, las claves JWT y la configuración SMTP se gestionan directamente en Kubernetes como objetos <code>Secret</code>, separados del pipeline. El workflow de despliegue no tiene acceso a esas credenciales: únicamente las aplica al clúster.</p>
+        </div>
+
+        <!-- SECCIÓN 7 -->
+        <div class="seccion" id="s7">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">7</span>
+                Beneficios para StockAI SmartFlow
+            </h2>
+
+            <div class="cuadricula-2">
+                <div class="beneficio">
+                    <h4>Velocidad de entrega</h4>
+                    <ul>
+                        <li>Un cambio en el backend puede estar en producción en menos de 10 minutos desde el merge</li>
+                        <li>No hay pasos manuales que omitir ni ejecutar en orden incorrecto</li>
+                        <li>Las 3 imágenes se construyen en paralelo usando la caché de GitHub Actions</li>
+                    </ul>
+                </div>
+                <div class="beneficio">
+                    <h4>Seguridad del despliegue</h4>
+                    <ul>
+                        <li>Ninguna versión con errores de sintaxis llega a producción</li>
+                        <li>La etiqueta por SHA del commit permite identificar exactamente qué código está en ejecución</li>
+                        <li>Si el rollout falla, los pods anteriores continúan activos de forma automática</li>
+                    </ul>
+                </div>
+                <div class="beneficio">
+                    <h4>Trazabilidad</h4>
+                    <ul>
+                        <li>Cada imagen Docker está etiquetada con el commit exacto que la generó</li>
+                        <li>El historial de GitHub Actions registra quién desplegó qué y cuándo</li>
+                        <li>El rollback requiere un único comando: actualizar la etiqueta al SHA anterior</li>
+                    </ul>
+                </div>
+                <div class="beneficio">
+                    <h4>Confiabilidad operacional</h4>
+                    <ul>
+                        <li>Kubernetes verifica que cada pod está sano antes de continuar el rolling update</li>
+                        <li>La aprobación manual protege producción de cambios accidentales</li>
+                        <li>El sistema de bodega nunca queda fuera de servicio durante un despliegue</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 8 -->
+        <div class="seccion" id="s8">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">8</span>
+                Flujo de extremo a extremo
+            </h2>
+
+            <div class="diagrama">
+<span class="d-nota">1. El desarrollador trabaja en una nueva funcionalidad</span>
+   git checkout -b feature/nueva-alerta
+   <span class="d-nota">[... escribe y prueba el código ...]</span>
+   git push origin feature/nueva-alerta
+
+<span class="d-nota">
+2. GitHub Actions ejecuta el CI de forma automática</span>
+   <span class="d-flecha">▶</span> Lint del backend                              <span class="d-ok">✓ OK</span>
+   <span class="d-flecha">▶</span> Construcción imagen backend (stage production) <span class="d-ok">✓ OK</span>
+   <span class="d-flecha">▶</span> Construcción imagen frontend                   <span class="d-ok">✓ OK</span>
+   <span class="d-flecha">▶</span> Construcción imagen servicio de IA             <span class="d-ok">✓ OK</span>
+
+<span class="d-nota">
+3. Se crea un Pull Request hacia main</span>
+   Revisión de código por el equipo
+   El CI vuelve a ejecutarse sobre el PR
+
+<span class="d-nota">
+4. PR aprobado y fusionado a main</span>
+   GitHub Actions detecta el push a main
+   <span class="d-flecha">▶</span> Construcción + publicación de imágenes en ghcr.io   <span class="d-ok">✓ Publicado</span>
+      <span class="d-tag">stockai-backend:a1b2c3d  (SHA del commit)</span>
+      <span class="d-tag">stockai-frontend:a1b2c3d</span>
+      <span class="d-tag">stockai-ai:a1b2c3d</span>
+
+<span class="d-nota">
+5. Aprobación manual (gate de producción)</span>
+   GitHub notifica al responsable de producción
+   El responsable revisa y aprueba en la interfaz de GitHub
+
+<span class="d-nota">
+6. Despliegue automático en Kubernetes</span>
+   <span class="d-flecha">▶</span> kubectl apply -f k8s/                              <span class="d-ok">✓ Manifiestos aplicados</span>
+   <span class="d-flecha">▶</span> Rolling update: backend  (3 pods → versión nueva)  <span class="d-ok">✓ Rollout completo</span>
+   <span class="d-flecha">▶</span> Rolling update: frontend (3 pods → versión nueva)  <span class="d-ok">✓ Rollout completo</span>
+   <span class="d-flecha">▶</span> Verificación: todos los pods en estado Running      <span class="d-ok">✓ Sistema operativo</span>
+
+<span class="d-nota">
+Tiempo total desde el merge hasta producción: aproximadamente 8 minutos.</span>
+            </div>
+
+            <div class="conclusion">
+                <div class="v-titulo">Conclusión</div>
+                <p>La estrategia CI/CD propuesta transforma el despliegue de StockAI SmartFlow de un proceso manual propenso a errores en una cadena automatizada y auditable. GitHub Actions actúa como coordinador central: organiza la construcción, validación, publicación y despliegue de las tres imágenes del sistema de forma determinista. Kubernetes garantiza que cada actualización llega a producción sin interrumpir el servicio de bodega. La aprobación manual funciona como válvula de seguridad, preservando el control humano en el punto de mayor impacto sobre el negocio.</p>
+            </div>
+        </div>
+
+    </div><!-- fin .cuerpo -->
+</div><!-- fin .pagina -->
+
+<div class="pie">
+    <span><strong>Universidad Mayor</strong> &nbsp;·&nbsp; Facultad de Ingeniería &nbsp;·&nbsp; ICCE1042</span>
+    <span>Hito 3 — Estrategia CI/CD con GitHub Actions</span>
+</div>
+
+</body>
+</html>

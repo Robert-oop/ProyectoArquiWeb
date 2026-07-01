@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stockai-config
+  namespace: stockai
+data:
+  # App
+  NODE_ENV: "production"
+  PORT: "3000"
+  LOG_LEVEL: "info"
+
+  # PostgreSQL — host = nombre del Service interno de K8s
+  POSTGRES_SERVER: "postgres-service"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "stockai_db"
+
+  # Redis — host = nombre del Service interno de K8s
+  REDIS_URL: "redis://redis-service:6379"
+
+  # AI Service — host = nombre del Service interno de K8s
+  AI_SERVICE_URL: "http://ai-service:9000"
+  AI_TIMEOUT_MS: "15000"
+  CV_CONFIDENCE_THRESHOLD: "0.85"
+
+  # Rate limiting
+  RATE_LIMIT: "100"
+  RATE_LIMIT_AUTH: "10"
+
+  # CORS — dominio público del Ingress en producción
+  CORS_ORIGINS: "https://stockai.tudominio.cl"
+
+  # Python AI
+  PYTHONUNBUFFERED: "1"

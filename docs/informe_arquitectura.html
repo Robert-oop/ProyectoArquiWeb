@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hito 2 — Informe de Arquitectura | StockAI SmartFlow</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Source+Sans+3:wght@400;600;700&display=swap');
+
+        :root {
+            --verde:      #134e4a;
+            --verde-med:  #0f766e;
+            --verde-claro:#ccfbf1;
+            --ambar:      #92400e;
+            --ambar-claro:#fef3c7;
+            --carbon:     #1e293b;
+            --gris:       #475569;
+            --gris-claro: #e2e8f0;
+            --fondo:      #f1f5f4;
+            --blanco:     #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Merriweather', Georgia, serif;
+            background: var(--fondo);
+            color: var(--carbon);
+            line-height: 1.85;
+            font-size: 15px;
+        }
+
+        /* ── Banda institucional ── */
+        .banda-top {
+            background: var(--verde);
+            height: 6px;
+        }
+        .banda-ambar {
+            background: var(--ambar);
+            height: 3px;
+        }
+
+        /* ── Encabezado ── */
+        .encabezado {
+            background: var(--blanco);
+            border-bottom: 1px solid var(--gris-claro);
+            padding: 20px 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+        .encabezado-texto h1 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1em;
+            font-weight: 700;
+            color: var(--verde);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        .encabezado-texto p {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.88em;
+            color: var(--gris);
+            margin-top: 2px;
+        }
+        .etiqueta-hito {
+            background: var(--verde);
+            color: var(--blanco);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.82em;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding: 7px 20px;
+            border-left: 4px solid var(--ambar);
+            white-space: nowrap;
+        }
+
+        /* ── Hoja de papel ── */
+        .pagina {
+            max-width: 860px;
+            margin: 40px auto 60px;
+            background: var(--blanco);
+            box-shadow: 0 2px 24px rgba(0,0,0,0.10);
+        }
+
+        /* ── Portada ── */
+        .portada {
+            padding: 72px 64px 56px;
+            border-bottom: 3px solid var(--verde);
+        }
+        .portada-categoria {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.82em;
+            font-weight: 700;
+            color: var(--ambar);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        .portada h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 2.4em;
+            font-weight: 700;
+            color: var(--verde);
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+        .portada-subtitulo {
+            font-family: 'Merriweather', serif;
+            font-size: 1.1em;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--gris);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        .portada-linea {
+            width: 60px;
+            height: 3px;
+            background: var(--ambar);
+            margin-bottom: 36px;
+        }
+        .portada-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            border-top: 1px solid var(--gris-claro);
+            border-left: 1px solid var(--gris-claro);
+        }
+        .meta-campo {
+            padding: 16px 20px;
+            border-right: 1px solid var(--gris-claro);
+            border-bottom: 1px solid var(--gris-claro);
+        }
+        .meta-campo label {
+            display: block;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.75em;
+            font-weight: 700;
+            color: var(--ambar);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .meta-campo span {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.95em;
+            color: var(--carbon);
+            font-weight: 600;
+        }
+
+        /* ── Índice ── */
+        .indice {
+            padding: 40px 64px;
+            background: #f8faf9;
+            border-bottom: 1px solid var(--gris-claro);
+        }
+        .indice h3 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.75em;
+            font-weight: 700;
+            color: var(--ambar);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        .indice ol {
+            list-style: none;
+            padding: 0;
+        }
+        .indice ol li {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.95em;
+            color: var(--gris);
+            padding: 5px 0;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            border-bottom: 1px dotted var(--gris-claro);
+        }
+        .indice ol li:last-child { border-bottom: none; }
+        .indice ol li .num {
+            font-weight: 700;
+            color: var(--verde);
+            min-width: 24px;
+        }
+        .indice ol li a {
+            color: var(--carbon);
+            text-decoration: none;
+        }
+        .indice ol li a:hover { color: var(--verde); text-decoration: underline; }
+
+        /* ── Cuerpo del documento ── */
+        .cuerpo {
+            padding: 48px 64px 72px;
+        }
+
+        /* ── Secciones ── */
+        .seccion {
+            margin-top: 56px;
+        }
+        .seccion:first-child { margin-top: 0; }
+
+        h2.titulo-seccion {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1.25em;
+            font-weight: 700;
+            color: var(--verde);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--verde);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        h2.titulo-seccion .num-seccion {
+            background: var(--verde);
+            color: var(--blanco);
+            font-size: 0.85em;
+            padding: 2px 10px;
+            letter-spacing: 0;
+        }
+
+        h3.subtitulo {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1.05em;
+            font-weight: 700;
+            color: var(--ambar);
+            margin: 32px 0 12px;
+            padding-left: 12px;
+            border-left: 3px solid var(--ambar);
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--carbon);
+            font-size: 0.97em;
+            text-align: justify;
+        }
+
+        /* ── Tablas ── */
+        .tabla-wrap {
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid var(--gris-claro);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.88em;
+        }
+        thead th {
+            background: var(--verde);
+            color: var(--blanco);
+            padding: 11px 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.82em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tbody td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--gris-claro);
+            vertical-align: top;
+            color: var(--carbon);
+        }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:nth-child(even) { background: #f8faf9; }
+        tbody tr:hover { background: var(--verde-claro); }
+
+        /* Badges de método HTTP */
+        .metodo {
+            display: inline-block;
+            font-family: 'Source Sans 3', monospace;
+            font-size: 0.8em;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 2px;
+            letter-spacing: 0.5px;
+        }
+        .get    { background: #d1fae5; color: #065f46; }
+        .post   { background: #dbeafe; color: #1e3a8a; }
+        .put    { background: #fef3c7; color: #78350f; }
+        .patch  { background: #ede9fe; color: #4c1d95; }
+        .delete { background: #fee2e2; color: #7f1d1d; }
+
+        /* ── Diagrama de código ── */
+        .diagrama {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-size: 0.85em;
+            padding: 28px 32px;
+            margin: 20px 0;
+            line-height: 1.7;
+            overflow-x: auto;
+            border-left: 4px solid var(--ambar);
+        }
+        .diagrama .c-comentario { color: #64748b; }
+        .diagrama .c-nodo       { color: #38bdf8; }
+        .diagrama .c-valor      { color: #86efac; }
+        .diagrama .c-clave      { color: #fbbf24; }
+
+        /* ── Recuadro de cita / nota ── */
+        .cita-tecnica {
+            background: var(--ambar-claro);
+            border-left: 5px solid var(--ambar);
+            padding: 18px 24px;
+            margin: 24px 0;
+            font-style: italic;
+            font-size: 0.97em;
+            color: var(--ambar);
+        }
+        .cita-tecnica p { color: var(--ambar); margin: 0; text-align: left; }
+
+        /* ── Cuadrícula de trade-offs ── */
+        .cuadricula-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .recuadro-ventaja,
+        .recuadro-limitacion {
+            padding: 20px 22px;
+            border: 1px solid var(--gris-claro);
+        }
+        .recuadro-ventaja {
+            border-top: 4px solid var(--verde-med);
+        }
+        .recuadro-limitacion {
+            border-top: 4px solid #b91c1c;
+        }
+        .recuadro-ventaja h4 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.85em;
+            font-weight: 700;
+            color: var(--verde-med);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .recuadro-limitacion h4 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #b91c1c;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .recuadro-ventaja ul,
+        .recuadro-limitacion ul {
+            padding-left: 18px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.92em;
+        }
+        .recuadro-ventaja li,
+        .recuadro-limitacion li {
+            margin-bottom: 7px;
+            color: var(--carbon);
+        }
+
+        /* ── Veredicto final ── */
+        .veredicto {
+            background: var(--verde);
+            color: var(--blanco);
+            padding: 32px 40px;
+            margin: 36px 0 0;
+        }
+        .veredicto .v-titulo {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.78em;
+            font-weight: 700;
+            color: #99f6e4;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+        .veredicto p {
+            color: #e0f2f0;
+            font-size: 0.95em;
+            margin: 0;
+            text-align: justify;
+            line-height: 1.8;
+        }
+
+        /* ── Código inline ── */
+        code {
+            font-family: 'Courier New', monospace;
+            background: var(--verde-claro);
+            color: var(--verde);
+            padding: 1px 6px;
+            font-size: 0.88em;
+            border-radius: 2px;
+        }
+
+        /* ── Pie de página ── */
+        .pie {
+            background: var(--carbon);
+            color: #94a3b8;
+            padding: 22px 56px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.82em;
+        }
+        .pie strong { color: var(--blanco); }
+    </style>
+</head>
+<body>
+
+<div class="banda-top"></div>
+<div class="banda-ambar"></div>
+
+<div class="encabezado">
+    <div class="encabezado-texto">
+        <h1>Proyecto Semestral I+D — Arquitectura de Desarrollo Web</h1>
+        <p>ICCE1042 &nbsp;·&nbsp; Universidad Mayor &nbsp;·&nbsp; Facultad de Ingeniería &nbsp;·&nbsp; 2026</p>
+    </div>
+    <div class="etiqueta-hito">Hito 2 — Unidad 2</div>
+</div>
+
+<div class="pagina">
+
+    <!-- ══ PORTADA ══ -->
+    <div class="portada">
+        <div class="portada-categoria">Informe Técnico · Arquitectura de Software</div>
+        <h2>StockAI SmartFlow</h2>
+        <div class="portada-subtitulo">
+            Informe de arquitectura — Construcción del MVP<br>
+            Justificación de paradigma: Monolito Modular con Microservicio de Inteligencia Artificial
+        </div>
+        <div class="portada-linea"></div>
+        <div class="portada-meta">
+            <div class="meta-campo">
+                <label>Asignatura</label>
+                <span>ICCE1042 — Arq. Desarrollo Web</span>
+            </div>
+            <div class="meta-campo">
+                <label>Hito</label>
+                <span>2 — Unidad 2</span>
+            </div>
+            <div class="meta-campo">
+                <label>Año académico</label>
+                <span>2026</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ ÍNDICE ══ -->
+    <div class="indice">
+        <h3>Contenido</h3>
+        <ol>
+            <li><span class="num">1.</span><a href="#s1">Descripción del MVP implementado</a></li>
+            <li><span class="num">2.</span><a href="#s2">Implementación de endpoints REST</a></li>
+            <li><span class="num">3.</span><a href="#s3">Persistencia de datos</a></li>
+            <li><span class="num">4.</span><a href="#s4">Debate arquitectónico: Monolito Modular vs. Microservicios</a></li>
+            <li><span class="num">5.</span><a href="#s5">Gestión de datos y trazabilidad</a></li>
+        </ol>
+    </div>
+
+    <!-- ══ CUERPO ══ -->
+    <div class="cuerpo">
+
+        <!-- SECCIÓN 1 -->
+        <div class="seccion" id="s1">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">1</span>
+                Descripción del MVP implementado
+            </h2>
+
+            <p>StockAI SmartFlow es un sistema de gestión de bodega (WMS, por sus siglas en inglés) orientado a empresas que trabajan con productos perecederos. El núcleo del negocio se sustenta en el algoritmo <strong>FEFO</strong> (<em>First Expired, First Out</em>): priorizar el despacho de los lotes más próximos a vencer antes que los más recientes.</p>
+
+            <p>El MVP implementado cubre el ciclo completo de operación: ingreso de mercadería con identificación automática por visión artificial, control de stock en tiempo real, sistema de alertas automáticas con notificación por correo electrónico, y un panel de monitoreo para los encargados de bodega.</p>
+
+            <h3 class="subtitulo">1.1 Stack tecnológico implementado</h3>
+            <div class="tabla-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Capa</th><th>Tecnología</th><th>Rol en el sistema</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Frontend</td><td>Vanilla JS ES6 + Vite 5 + Nginx</td><td>SPA — interfaz de usuario compilada y servida de forma estática</td></tr>
+                        <tr><td>Backend</td><td>Node.js 20 + Express 4</td><td>API REST — lógica de negocio, autenticación y trabajos automáticos</td></tr>
+                        <tr><td>ORM</td><td>Sequelize 6</td><td>Abstracción de base de datos con migraciones versionadas</td></tr>
+                        <tr><td>Base de datos</td><td>PostgreSQL 15</td><td>Persistencia principal de todos los datos del negocio</td></tr>
+                        <tr><td>Caché</td><td>Redis 7</td><td>Control de tasa de peticiones e invalidación de sesiones</td></tr>
+                        <tr><td>Inteligencia artificial</td><td>Python 3.11 + FastAPI + OpenCV</td><td>Microservicio de identificación de productos por imagen</td></tr>
+                        <tr><td>Orquestación</td><td>Docker + Docker Compose</td><td>Contenedores aislados con red interna y volúmenes persistentes</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2 -->
+        <div class="seccion" id="s2">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">2</span>
+                Implementación de endpoints REST
+            </h2>
+
+            <p>La API fue diseñada siguiendo los principios de Roy Fielding para interfaces REST: orientada a recursos, sin estado, con verbos HTTP semánticamente correctos y códigos de respuesta estándar. Todos los endpoints están protegidos con autenticación mediante JWT (<em>JSON Web Tokens</em>) y control de roles.</p>
+
+            <h3 class="subtitulo">2.1 Módulo de autenticación</h3>
+            <div class="tabla-wrap">
+                <table>
+                    <thead><tr><th>Método</th><th>URI</th><th>Descripción</th><th>Respuesta</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="metodo post">POST</span></td><td><code>/api/v1/auth/login</code></td><td>Inicio de sesión con correo y contraseña</td><td>200 — access_token + refresh_token</td></tr>
+                        <tr><td><span class="metodo post">POST</span></td><td><code>/api/v1/auth/refresh</code></td><td>Renovar el token de acceso expirado</td><td>200 — nuevo access_token</td></tr>
+                        <tr><td><span class="metodo post">POST</span></td><td><code>/api/v1/auth/logout</code></td><td>Invalidar la sesión activa</td><td>204 — sin contenido</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="subtitulo">2.2 Módulo de productos</h3>
+            <div class="tabla-wrap">
+                <table>
+                    <thead><tr><th>Método</th><th>URI</th><th>Descripción</th><th>Respuesta</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="metodo get">GET</span></td><td><code>/api/v1/products</code></td><td>Lista enriquecida con stock real, estado FEFO y umbral</td><td>200 — data[] + meta de paginación</td></tr>
+                        <tr><td><span class="metodo post">POST</span></td><td><code>/api/v1/products</code></td><td>Crear un producto nuevo (Admin/Manager)</td><td>201 — producto creado</td></tr>
+                        <tr><td><span class="metodo get">GET</span></td><td><code>/api/v1/products/:id</code></td><td>Detalle de producto por identificador</td><td>200 — producto / 404</td></tr>
+                        <tr><td><span class="metodo put">PUT</span></td><td><code>/api/v1/products/:id</code></td><td>Actualizar el producto de forma completa</td><td>200 — producto actualizado</td></tr>
+                        <tr><td><span class="metodo delete">DELETE</span></td><td><code>/api/v1/products/:id</code></td><td>Desactivar producto (eliminación lógica)</td><td>204 — sin contenido</td></tr>
+                        <tr><td><span class="metodo post">POST</span></td><td><code>/api/v1/products/:id/batches</code></td><td>Registrar ingreso de lote con cálculo FEFO automático</td><td>201 — lote creado con fecha_alerta</td></tr>
+                        <tr><td><span class="metodo put">PUT</span></td><td><code>/api/v1/products/:id/threshold</code></td><td>Definir el umbral de stock crítico</td><td>200 — umbral actualizado</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="subtitulo">2.3 Módulo de lotes (FEFO)</h3>
+            <div class="tabla-wrap">
+                <table>
+                    <thead><tr><th>Método</th><th>URI</th><th>Descripción</th><th>Respuesta</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="metodo get">GET</span></td><td><code>/api/v1/batches/expiring</code></td><td>Cola FEFO: lotes ordenados por urgencia de vencimiento</td><td>200 — data[] ordenado por fecha_alerta ASC</td></tr>
+                        <tr><td><span class="metodo patch">PATCH</span></td><td><code>/api/v1/batches/:id/consume</code></td><td>Descontar unidades despachadas de un lote</td><td>200 — lote actualizado</td></tr>
+                        <tr><td><span class="metodo patch">PATCH</span></td><td><code>/api/v1/batches/:id/void</code></td><td>Dar de baja por merma y registrar el motivo</td><td>200 — genera alerta MERMA automática</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="subtitulo">2.4 Módulo de alertas</h3>
+            <div class="tabla-wrap">
+                <table>
+                    <thead><tr><th>Método</th><th>URI</th><th>Descripción</th><th>Respuesta</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="metodo get">GET</span></td><td><code>/api/v1/alerts</code></td><td>Listar alertas (filtros: tipo, resuelta, página)</td><td>200 — data[] + meta</td></tr>
+                        <tr><td><span class="metodo patch">PATCH</span></td><td><code>/api/v1/alerts/:id/resolve</code></td><td>Marcar alerta como resuelta con usuario responsable</td><td>200 — alerta resuelta</td></tr>
+                        <tr><td><span class="metodo post">POST</span></td><td><code>/api/v1/alerts/run-stock-check</code></td><td>Forzar la verificación de stock de forma manual</td><td>200 — resumen de alertas generadas</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="subtitulo">2.5 Módulo de inteligencia artificial</h3>
+            <div class="tabla-wrap">
+                <table>
+                    <thead><tr><th>Método</th><th>URI</th><th>Descripción</th><th>Respuesta</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="metodo post">POST</span></td><td><code>/api/v1/ai/identify</code></td><td>Identificar producto por imagen (multipart/form-data)</td><td>200 — nombre, confianza, fecha de vencimiento, lote</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="subtitulo">2.6 Muestra de payloads verificables</h3>
+            <div class="diagrama">
+<span class="c-comentario">// POST /api/v1/auth/login</span>
+<span class="c-clave">Solicitud:</span>  { "email": "admin@stockai.cl", "password": "Admin2025!" }
+<span class="c-clave">Respuesta:</span> { "access_token": "eyJ...", "refresh_token": "eyJ...", "user": { "role": "ROLE_ADMIN" } }
+
+<span class="c-comentario">// POST /api/v1/products/:id/batches</span>
+<span class="c-clave">Solicitud:</span>  { "lotNumber": "L20260701-001", "quantity": 48, "expiryDate": "2026-08-15" }
+<span class="c-clave">Respuesta:</span> { "id": "uuid", "fecha_alerta": "2026-08-04", "fefo_priority": "P1", "days_to_expiry": 45 }
+
+<span class="c-comentario">// GET /api/v1/batches/expiring?days=30</span>
+<span class="c-clave">Respuesta:</span> { "data": [ { "lot_number": "L-001", "product": { "name": "Leche entera 1L" },
+             "days_to_expiry": 8, "fefo_priority": "P1", "algorithm_alert": true } ] }
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3 -->
+        <div class="seccion" id="s3">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">3</span>
+                Persistencia de datos
+            </h2>
+
+            <p>La persistencia se implementó con <strong>PostgreSQL 15</strong> como motor relacional y <strong>Sequelize 6</strong> como ORM, siguiendo el patrón de repositorio implícito en la capa de servicios. El esquema de la base de datos está completamente versionado mediante migraciones de Sequelize CLI, ejecutadas automáticamente al arrancar el servidor.</p>
+
+            <h3 class="subtitulo">3.1 Decisión de diseño: eliminación lógica global</h3>
+            <p>Todos los modelos principales utilizan eliminación lógica (<code>paranoid: true</code> en Sequelize): los registros nunca se borran físicamente. En cambio, se asigna un valor a la columna <code>deleted_at</code> con la fecha de eliminación, y Sequelize filtra automáticamente esos registros en todas las consultas. Esto garantiza trazabilidad completa del historial de inventario con fines regulatorios y de auditoría.</p>
+
+            <h3 class="subtitulo">3.2 Seguridad de credenciales</h3>
+            <p>Todas las credenciales de acceso a la base de datos, las claves JWT y la configuración SMTP se almacenan en el archivo <code>backend/.env</code>, excluido del repositorio mediante <code>.gitignore</code>. El repositorio incluye un archivo <code>.env.example</code> con la estructura de variables sin valores reales. Docker Compose inyecta estas variables como variables de entorno del contenedor en tiempo de ejecución.</p>
+        </div>
+
+        <!-- SECCIÓN 4 -->
+        <div class="seccion" id="s4">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">4</span>
+                Debate arquitectónico: Monolito Modular vs. Microservicios
+            </h2>
+
+            <div class="cita-tecnica">
+                <p>"La arquitectura correcta no es la más sofisticada; es la que resuelve el problema actual con el menor costo de mantenimiento futuro. Un MVP que no llega a producción por exceso de complejidad arquitectónica es, técnicamente, un fracaso."</p>
+            </div>
+
+            <h3 class="subtitulo">4.1 La decisión adoptada: Monolito Modular con Microservicio de IA</h3>
+
+            <p>StockAI SmartFlow implementa un <strong>Monolito Modular</strong> para el núcleo del negocio (Node.js + Express), con un único <strong>Microservicio independiente</strong> para el componente de visión artificial (Python + FastAPI). Esta arquitectura híbrida no es una concesión, sino una decisión deliberada basada en tres factores concretos.</p>
+
+            <p><strong>Factor 1 — Tecnología incompatible:</strong> el motor de visión artificial requiere OpenCV, NumPy y bibliotecas de procesamiento de imagen que son nativas del ecosistema Python y no tienen un equivalente de calidad en Node.js. Forzar su integración en el monolito habría implicado el uso de bindings de C++ con rendimiento inestable. La separación en un microservicio permite que cada componente emplee el lenguaje óptimo para su función.</p>
+
+            <p><strong>Factor 2 — Escalado independiente:</strong> el procesamiento de imágenes es computacionalmente costoso (análisis ORB de 500 puntos clave por imagen) y esporádico (solo durante el ingreso de mercadería). Un microservicio permite escalar exclusivamente ese componente cuando se requiere, sin replicar todo el backend.</p>
+
+            <p><strong>Factor 3 — Simplicidad del núcleo:</strong> el dominio de negocio central —lotes, FEFO, alertas, usuarios— presenta alta cohesión interna y bajo acoplamiento entre módulos. Fragmentarlo en microservicios a nivel de MVP habría introducido latencia de red, complejidad en transacciones distribuidas y costo operacional sin beneficio real a esta escala.</p>
+
+            <h3 class="subtitulo">4.2 Arquitectura física resultante</h3>
+
+            <div class="diagrama">
+<span class="c-comentario">┌──────────────────────────────────────────────────────────────────┐</span>
+<span class="c-comentario">│                      stockai-network (Docker)                     │</span>
+<span class="c-comentario">│                                                                    │</span>
+<span class="c-comentario">│  ┌───────────────┐   ┌────────────────────────────────────────┐  │</span>
+<span class="c-comentario">│  │     Nginx     │──▶│       Node.js Backend (Monolito)        │  │</span>
+<span class="c-comentario">│  │    :8080      │   │   Express · Sequelize · node-cron       │  │</span>
+<span class="c-comentario">│  └───────────────┘   │   Auth · FEFO · Alertas · Correo        │  │</span>
+<span class="c-comentario">│                       └──────────────┬─────────────────────────┘  │</span>
+<span class="c-comentario">│                                      │ HTTP interno                │</span>
+<span class="c-comentario">│             ┌────────────────────────┼──────────────────────┐      │</span>
+<span class="c-comentario">│             │                        │                       │      │</span>
+<span class="c-comentario">│  ┌──────────▼───┐       ┌────────────▼───┐      ┌──────────▼──┐  │</span>
+<span class="c-comentario">│  │  PostgreSQL  │       │     Redis      │      │  AI Service  │  │</span>
+<span class="c-comentario">│  │    :5432     │       │    :6379       │      │  Python:9000 │  │</span>
+<span class="c-comentario">│  │  (negocio)   │       │  (rate limit)  │      │  FastAPI+CV  │  │</span>
+<span class="c-comentario">│  └──────────────┘       └────────────────┘      └─────────────┘  │</span>
+<span class="c-comentario">└────────────────────────────────────────────────────────────────────┘</span>
+            </div>
+
+            <h3 class="subtitulo">4.3 Análisis de trade-offs</h3>
+
+            <div class="cuadricula-2">
+                <div class="recuadro-ventaja">
+                    <h4>Ventajas del Monolito Modular (núcleo)</h4>
+                    <ul>
+                        <li>Una sola base de código para desplegar y monitorear</li>
+                        <li>Transacciones ACID nativas sin coordinación distribuida</li>
+                        <li>Latencia cero entre módulos internos (llamadas en memoria)</li>
+                        <li>Menor costo operacional en la etapa de MVP</li>
+                        <li>Depuración directa con un solo proceso</li>
+                        <li>Migraciones de esquema atómicas y versionadas</li>
+                    </ul>
+                </div>
+                <div class="recuadro-limitacion">
+                    <h4>Limitaciones a mayor escala</h4>
+                    <ul>
+                        <li>Escalar requiere replicar todo el servicio, no solo el módulo congestionado</li>
+                        <li>Un fallo catastrófico afecta todos los módulos simultáneamente</li>
+                        <li>Equipos grandes deben coordinarse en el mismo repositorio</li>
+                        <li>Los despliegues afectan toda la aplicación de forma simultánea</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cuadricula-2">
+                <div class="recuadro-ventaja">
+                    <h4>Ventajas del Microservicio de IA</h4>
+                    <ul>
+                        <li>Lenguaje óptimo para visión artificial (Python / OpenCV)</li>
+                        <li>Escalado independiente según la demanda de procesamiento</li>
+                        <li>Fallo aislado: si el servicio cae, el inventario sigue operando</li>
+                        <li>Despliegue y actualización del modelo sin modificar el backend</li>
+                    </ul>
+                </div>
+                <div class="recuadro-limitacion">
+                    <h4>Costo del Microservicio</h4>
+                    <ul>
+                        <li>Latencia de red en cada identificación por imagen</li>
+                        <li>Complejidad adicional de orquestación en Docker</li>
+                        <li>Requiere gestión de verificación de salud (health check) independiente</li>
+                        <li>Manejo explícito de errores de red y tiempos de espera</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="subtitulo">4.4 Por qué no se optó por microservicios completos en esta etapa</h3>
+
+            <p>Una arquitectura de microservicios pura habría implicado separar el módulo de usuarios, el de alertas, el de lotes y el de productos en servicios independientes. A nivel de MVP, esto habría introducido los siguientes costos sin una contrapartida real.</p>
+
+            <p><strong>Transacciones distribuidas:</strong> la operación de registrar un lote involucra actualizar el stock, verificar el umbral, crear una alerta y registrar la acción en auditoría. En un monolito, todo ocurre en una única transacción ACID. En microservicios, requeriría un patrón Saga o confirmación en dos fases, multiplicando la complejidad sin beneficio para un equipo pequeño.</p>
+
+            <p><strong>Latencia interna:</strong> las consultas del panel combinan datos de productos, lotes y alertas en tiempo real. En un monolito son consultas JOIN que se resuelven en milisegundos. En microservicios serían múltiples llamadas HTTP sincrónicas o un API Gateway con agregación, añadiendo entre 50 y 200 ms de latencia innecesaria.</p>
+
+            <p><strong>Costo operacional:</strong> cinco servicios Docker ya representan una complejidad de orquestación manejable. Diez o quince servicios a este nivel de madurez del producto implicarían un costo de operación que superaría al costo de desarrollo del propio sistema.</p>
+
+            <div class="veredicto">
+                <div class="v-titulo">Veredicto arquitectónico</div>
+                <p>La arquitectura elegida —Monolito Modular con Microservicio de IA— es la respuesta de ingeniería pragmática correcta para este MVP. El monolito garantiza coherencia transaccional, velocidad de desarrollo y simplicidad operacional donde el dominio es homogéneo. El microservicio de IA es la única excepción justificada por una incompatibilidad tecnológica real, no por aspiraciones de escalabilidad prematura. Esta decisión puede revertirse cuando el sistema alcance una escala que lo justifique: los módulos internos del monolito están suficientemente desacoplados para ser extraídos como servicios independientes en una etapa futura, sin necesidad de reescribir la lógica de negocio.</p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 5 -->
+        <div class="seccion" id="s5">
+            <h2 class="titulo-seccion">
+                <span class="num-seccion">5</span>
+                Gestión de datos y trazabilidad
+            </h2>
+
+            <p>El sistema implementa tres mecanismos de persistencia complementarios que garantizan la integridad y el historial completo de las operaciones.</p>
+
+            <p><strong>PostgreSQL (datos del negocio):</strong> almacena el catálogo de productos, los lotes con su historial de movimientos, las alertas generadas, los usuarios y todos los registros de auditoría. El esquema está definido mediante migraciones versionadas que se ejecutan automáticamente en cada arranque, garantizando que el estado de la base de datos siempre coincida con la versión del código.</p>
+
+            <p><strong>Redis (estado efímero):</strong> gestiona el control de tasa de peticiones por IP y por usuario (máximo 100 peticiones por minuto en general, 10 en rutas de autenticación) y la invalidación de tokens de sesión. Si Redis se reinicia, se regenera automáticamente sin pérdida de datos del negocio.</p>
+
+            <p><strong>Registro de auditoría (<em>AuditLog</em>):</strong> cada operación crítica —creación de lote, consumo, merma, actualización de umbrales— genera un registro inmutable en la tabla <code>audit_logs</code> con el identificador del usuario, la acción ejecutada, el estado anterior y el nuevo estado. Esta tabla no utiliza eliminación lógica, para garantizar que ningún registro pueda ser borrado, ni siquiera de forma accidental.</p>
+        </div>
+
+    </div><!-- fin .cuerpo -->
+</div><!-- fin .pagina -->
+
+<div class="pie">
+    <span><strong>Universidad Mayor</strong> &nbsp;·&nbsp; Facultad de Ingeniería &nbsp;·&nbsp; ICCE1042</span>
+    <span>Hito 2 — Informe de Arquitectura y Justificación de Paradigma</span>
+</div>
+
+</body>
+</html>

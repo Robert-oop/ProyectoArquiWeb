@@ -1,0 +1,180 @@
+# ═══════════════════════════════════════════════════════════════════
+# CD — Entrega Continua
+#
+# Se ejecuta SOLO cuando un PR es fusionado a main (push a main).
+# Pipeline completo: construir → publicar imágenes → desplegar en K8s.
+#
+# Secrets requeridos en GitHub (Settings → Secrets → Actions):
+#   KUBE_CONFIG      — kubeconfig codificado en base64 del clúster
+#   GHCR_TOKEN       — Personal Access Token con permisos write:packages
+#
+# Jobs (secuenciales):
+#   1. publish   — construye y sube las 3 imágenes a GitHub Container Registry
+#   2. deploy    — aplica los manifiestos K8s y verifica el rollout
+# ═══════════════════════════════════════════════════════════════════
+
+name: CD — Publish & Deploy
+
+on:
+  push:
+    branches: [main]          # solo cuando se fusiona a main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_OWNER: ${{ github.repository_owner }}
+
+jobs:
+
+  # ── Job 1: Publicar imágenes en GitHub Container Registry ──────
+  publish:
+    name: Build & Push Docker Images
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write           # necesario para subir a ghcr.io
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login en GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}   # token automático de GitHub Actions
+
+      # Metadatos de imagen: tag con SHA del commit + tag "latest"
+      - name: Metadatos imagen backend
+        id: meta-backend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/stockai-backend
+          tags: |
+            type=sha,prefix=,format=short
+            type=raw,value=latest
+
+      - name: Metadatos imagen frontend
+        id: meta-frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/stockai-frontend
+          tags: |
+            type=sha,prefix=,format=short
+            type=raw,value=latest
+
+      - name: Metadatos imagen AI service
+        id: meta-ai
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/stockai-ai
+          tags: |
+            type=sha,prefix=,format=short
+            type=raw,value=latest
+
+      # Build y push de las 3 imágenes en paralelo usando caché de GitHub Actions
+      - name: Build & Push — Backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          target: production
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build & Push — Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build & Push — AI Service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./ai-service
+          push: true
+          tags: ${{ steps.meta-ai.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ── Job 2: Desplegar en Kubernetes ─────────────────────────────
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs: publish            # solo si publish terminó exitosamente
+    environment: production   # requiere aprobación manual en GitHub Environments
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: "v1.29.0"
+
+      - name: Configurar credenciales del clúster
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      - name: Aplicar namespace y configuración base
+        run: |
+          kubectl apply -f k8s/namespace.yaml
+          kubectl apply -f k8s/configmap.yaml
+          # El secret se gestiona externamente (no en el repositorio)
+          # En producción: kubectl apply -f secret.yaml con valores reales
+
+      - name: Aplicar servicios de infraestructura
+        run: |
+          kubectl apply -f k8s/postgres.yaml
+          kubectl apply -f k8s/redis.yaml
+          # Esperar a que PostgreSQL esté listo antes de desplegar el backend
+          kubectl rollout status statefulset/postgres -n stockai --timeout=120s
+
+      - name: Desplegar aplicación
+        run: |
+          # Actualizar la imagen con el SHA del commit actual (despliegue inmutable)
+          kubectl set image deployment/backend \
+            backend=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/stockai-backend:${{ github.sha }} \
+            -n stockai
+
+          kubectl set image deployment/frontend \
+            frontend=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/stockai-frontend:${{ github.sha }} \
+            -n stockai
+
+          kubectl set image deployment/ai-service \
+            ai-service=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/stockai-ai:${{ github.sha }} \
+            -n stockai
+
+          # Aplicar manifiestos completos (en primera ejecución crea los recursos)
+          kubectl apply -f k8s/backend.yaml
+          kubectl apply -f k8s/ai-service.yaml
+          kubectl apply -f k8s/frontend.yaml
+
+      - name: Verificar rollout exitoso
+        run: |
+          kubectl rollout status deployment/backend   -n stockai --timeout=180s
+          kubectl rollout status deployment/frontend  -n stockai --timeout=60s
+          kubectl rollout status deployment/ai-service -n stockai --timeout=180s
+
+      - name: Verificar Pods en ejecución
+        run: kubectl get pods -n stockai
+
+      - name: Notificar resultado
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "Despliegue exitoso — commit ${{ github.sha }} en producción"
+          else
+            echo "Despliegue fallido — revisar logs arriba"
+          fi
